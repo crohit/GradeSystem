@@ -104,7 +104,7 @@ public class AppealRepresentation extends Representations {
             System.out.println("Error");
         }
         
-        LOG.debug("Created the OrderRepresentation {}", this);
+        LOG.debug("Created the AppealRepresentation {}", this);
     }
 
     public String toString() {

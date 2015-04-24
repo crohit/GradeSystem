@@ -14,11 +14,15 @@ import java.lang.StringBuilder;
 public class Appeal {
     
      StringBuilder AppealComments = new StringBuilder(500);
-     AppealStatus appStatus = AppealStatus.PENDING;
+     AppealStatus appStatus ;
      
      public StringBuilder getComments()
      {
          return AppealComments;
+     }
+     public String getCom()
+     {
+         return AppealComments.toString();
      }
      
       public void setComments(StringBuilder com)
@@ -30,7 +34,11 @@ public class Appeal {
            AppealComments.append(app);
            this.appStatus = AppealStatus.PENDING;
       }
-      
+       public Appeal(StringBuilder app,AppealStatus status)
+      {
+           AppealComments.append(app);
+           this.appStatus = status;
+      }
       public void setStatus(AppealStatus s)
       {
           appStatus = s;

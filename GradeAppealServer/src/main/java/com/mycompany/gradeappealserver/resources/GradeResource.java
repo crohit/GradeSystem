@@ -61,7 +61,7 @@ public class GradeResource {
         return "hello";
     }
     
-     @GET
+    @GET
     @Path("/{gradeId}")
     @Produces("application/vnd.cse564-appeals+xml ")
     public Response getTheGrade() {
@@ -73,7 +73,7 @@ public class GradeResource {
             GradeRepresentations graderesponseRepresentation = new ReadGradeActivity().retrieveByUri(new RestbucksUri(uriInfo.getRequestUri()));
             response = Response.ok().entity(graderesponseRepresentation).build();
         } catch(Exception nsoe) {
-            LOG.debug("No such order");
+            LOG.debug("No such grade");
             response = Response.status(Response.Status.NOT_FOUND).build();
         } 
         

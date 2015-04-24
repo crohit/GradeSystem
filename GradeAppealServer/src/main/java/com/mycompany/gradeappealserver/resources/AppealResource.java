@@ -9,11 +9,13 @@ package com.mycompany.gradeappealserver.resources;
 import com.mycompany.gradeappealserver.activities.CreateAppealActivity;
 import com.mycompany.gradeappealserver.activities.CreateGradeActivity;
 import com.mycompany.gradeappealserver.activities.ReadAppealActivity;
+import com.mycompany.gradeappealserver.activities.UpdateAppealActivity;
 import com.mycompany.gradeappealserver.model.Identifier;
 import com.mycompany.gradeappealserver.repositories.GradeRepository;
 import com.mycompany.gradeappealserver.representations.AppealRepresentation;
 import com.mycompany.gradeappealserver.representations.GradeRepresentations;
 import com.mycompany.gradeappealserver.representations.RestbucksUri;
+import com.mycompany.gradeappealserver.model.Appeal;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -72,6 +74,27 @@ public class AppealResource {
         return response;
     }
     
+        @POST
+    @Path("/{appealId}")
+    @Consumes("application/vnd.cse564-appeals+xml ")
+    @Produces("application/vnd.cse564-appeals+xml ")
+    public Response updateAppeal(String appealrepresentation) {
+        LOG.info("Updating an appeal Resource");
+        
+        Response response;
+                try {
+            AppealRepresentation responseRepresentation = new UpdateAppealActivity().update(AppealRepresentation.fromXmlString(appealrepresentation).getAppeal(), new RestbucksUri(uriInfo.getRequestUri()));
+            response = Response.ok().entity(responseRepresentation).build();
+        } catch (Exception ioe) {
+            LOG.debug("Something went wrong updating the order resource");
+            response = Response.serverError().build();
+        } 
+        
+        LOG.debug("Resulting response for updating the order resource is {}", response);
+        
+        return response;
+     }
+
     
     @POST
     @Consumes("application/vnd.cse564-appeals+xml")
@@ -96,4 +119,7 @@ public class AppealResource {
         
         return response;
     }
+            
+            
+            
 }

@@ -1,14 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+ //* To change this license header, choose License Headers in Project Properties.
+ //* To change this template file, choose Tools | Templates
+ //* and open the template in the editor.
+  
+
 package com.mycompany.gradeappealclient.model;
 
 import com.mycompany.gradeappealclient.representations.Representations;
 import java.lang.StringBuilder;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 /**
  *
  * @author Rohit
@@ -34,13 +36,18 @@ public class Appeal {
      }
       public Appeal(StringBuilder app)
       {
-           AppealComments.append(app);
+          this.AppealComments.append(app);
            this.appStatus = AppealStatus.PENDING;
       }
-      
+      public Appeal(AppealStatus status)
+    {
+          //this.AppealComments.append(app);
+       
+           this.appStatus = status;
+      }
       public void setStatus(AppealStatus s)
       {
-          appStatus = s;
+          this.appStatus= s;
       }
       public AppealStatus getStatus()
       {

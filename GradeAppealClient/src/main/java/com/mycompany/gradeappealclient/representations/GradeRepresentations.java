@@ -63,9 +63,6 @@ public class GradeRepresentations extends Representations{
         GradeRepresentations gradeRepresentation = null; 
         
 //        RestbucksUri paymentUri = new RestbucksUri(gradeUri.getBaseUri() + "/payment/" + gradeUri.getId().toString());
-//        LOG.debug("Payment URI = {}", paymentUri);
-        
-        
         
         LOG.debug("The order representation created for the Create Response Order Representation is {}", gradeRepresentation);
         

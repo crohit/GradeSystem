@@ -16,3 +16,4 @@ com\mycompany\gradeappealserver\representations\Link.class
 com\mycompany\gradeappealserver\representations\Representations.class
 com\mycompany\gradeappealserver\activities\ReadAppealActivity.class
 com\mycompany\gradeappealserver\resources\AppealResource.class
+com\mycompany\gradeappealserver\activities\UpdateAppealActivity.class

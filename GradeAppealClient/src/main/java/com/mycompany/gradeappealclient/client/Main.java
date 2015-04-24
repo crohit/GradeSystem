@@ -12,6 +12,10 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.mycompany.gradeappealclient.model.Grade;
 import com.mycompany.gradeappealclient.model.Appeal;
+import com.mycompany.gradeappealclient.model.AppealStatus;
+import static com.mycompany.gradeappealclient.model.AppealStatus.APPROVED;
+import static com.mycompany.gradeappealclient.model.AppealStatus.REJECTED;
+import com.mycompany.gradeappealclient.representations.RestbucksUri;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +51,7 @@ public class Main {
         LOG.debug("Created client {}", client);
         Grade grade = new Grade('A');
           GradeRepresentations gradeRepresentation = client.resource(serviceUri).accept(GRADEAPPEAL_MEDIA_TYPE).type(GRADEAPPEAL_MEDIA_TYPE).post(GradeRepresentations.class, grade);
-        LOG.debug("Created orderRepresentation {} denoted by the URI {}", gradeRepresentation, gradeRepresentation.getSelfLink().getUri().toString());
+        LOG.debug("Created Grade Representation {} denoted by the URI {}", gradeRepresentation, gradeRepresentation.getSelfLink().getUri().toString());
         System.out.println(String.format("Grades posted at [%s]", gradeRepresentation.getSelfLink().getUri().toString()));
           System.out.println(String.format("Grades posted at [%s]", gradeRepresentation.getGrade().getValue()));
         
@@ -57,7 +61,7 @@ public class Main {
       AppealRequest.append("I have a questions. Please consider?");
        Appeal appeal = new Appeal(AppealRequest);
        AppealRepresentation appealRepresentation = client.resource(serviceUri1).accept(GRADEAPPEAL_MEDIA_TYPE).type(GRADEAPPEAL_MEDIA_TYPE).post(AppealRepresentation.class, appeal);
-       LOG.debug("Created orderRepresentation {} denoted by the URI {}", appealRepresentation, appealRepresentation.getSelfLink().getUri().toString());
+       LOG.debug("Created AppealRepresentation {} denoted by the URI {}", appealRepresentation, appealRepresentation.getSelfLink().getUri().toString());
         System.out.println(String.format("Appeals posted at [%s]", appealRepresentation.getSelfLink().getUri().toString())); 
        
                 // Get an appeal
@@ -66,37 +70,60 @@ public class Main {
         Link appealLink = appealRepresentation.getSelfLink();
         AppealRepresentation postAppealRepresentation = client.resource(appealLink.getUri()).accept(GRADEAPPEAL_MEDIA_TYPE).get(AppealRepresentation.class);
        System.out.println(String.format("Appeal placed, current status [%s], placed at %s", postAppealRepresentation.getStatus(), postAppealRepresentation.getSelfLink())); 
+    
+       LOG.debug("\n\nStep 4. Professor gets the appeal, revies and updates the appeal to approved");
+        System.out.println(String.format("About to update appeal at [%s] via POST", postAppealRepresentation.getUpdateLink().getUri().toString()));
+        Appeal ap = new Appeal(postAppealRepresentation.getAppeal().getStatus());
+        Link upLink = postAppealRepresentation.getUpdateLink();
+        ap.setStatus(APPROVED);
+        AppealRepresentation upRepresentation = client.resource(upLink.getUri()).accept(upLink.getMediaType()).type(upLink.getMediaType()).post(AppealRepresentation.class, ap );
+        LOG.debug("Created updated Appeal representation link {}", upRepresentation);
+        System.out.println(String.format("Appeal updated by Professor at [%s] and status is %s", upRepresentation.getSelfLink().getUri().toString(),ap.getStatus()));
+  
         
-       LOG.debug("\n\nStep 4. Get the grade");
+        LOG.debug("\n\nStep 4. Professor gets the appeal, revies and rejects the appeal");
+        System.out.println(String.format("About to update appeal at [%s] via POST", postAppealRepresentation.getUpdateLink().getUri().toString()));
+        Appeal app = new Appeal(postAppealRepresentation.getAppeal().getStatus());
+        Link upLin = postAppealRepresentation.getUpdateLink();
+        app.setStatus(REJECTED);
+        AppealRepresentation uRepresentation = client.resource(upLink.getUri()).accept(upLink.getMediaType()).type(upLink.getMediaType()).post(AppealRepresentation.class, app );
+        LOG.debug("Created updated Appeal representation link {}", uRepresentation);
+        System.out.println(String.format("Appeal updated by Professor at [%s] and status is %s", uRepresentation.getSelfLink().getUri().toString(),app.getStatus()));
+       
+       LOG.debug("\n\nStep 5. Get the grade");
         System.out.println(String.format("About to request grade from [%s] via GET", gradeRepresentation.getSelfLink().getUri().toString()));
         Link gradeLink = gradeRepresentation.getSelfLink();
         GradeRepresentations postGradeRepresentation = client.resource(gradeLink.getUri()).accept(GRADEAPPEAL_MEDIA_TYPE).get(GradeRepresentations.class);
        System.out.println(String.format("Final grade placed at", postGradeRepresentation.getSelfLink())); 
 
         
-// Try to update a different order
-      /*LOG.info("\n\nStep 2. Try to update a different order");
-        System.out.println(String.format("About to update an order with bad URI [%s] via POST", orderRepresentation.getUpdateLink().getUri().toString() + "/bad-uri"));
-        order = order().withRandomItems().build();
-        LOG.debug("Created base order {}", order);
-        Link badLink = new Link("bad", new RestbucksUri(orderRepresentation.getSelfLink().getUri().toString() + "/bad-uri"), RESTBUCKS_MEDIA_TYPE);
+ //Try to update a different order
+      LOG.info("\n\nStep 6. Updating an appeal with a BAD ID");
+        System.out.println(String.format("About to update an order with bad URI [%s] via POST", appealRepresentation.getUpdateLink().getUri().toString() + "/bad-uri"));
+        StringBuilder AppealRequest1 = new StringBuilder();
+        AppealRequest1.append("I have a questions. Please consider the rectified appeal?");
+        LOG.debug("Created base appeal {}", appeal);
+        Link badLink = new Link("bad", new RestbucksUri(appealRepresentation.getSelfLink().getUri().toString() + "/bad-uri"), GRADEAPPEAL_MEDIA_TYPE);
         LOG.debug("Create bad link {}", badLink);
-        ClientResponse badUpdateResponse = client.resource(badLink.getUri()).accept(badLink.getMediaType()).type(badLink.getMediaType()).post(ClientResponse.class, new OrderRepresentation(order));
+        ClientResponse badUpdateResponse = client.resource(badLink.getUri()).accept(badLink.getMediaType()).type(badLink.getMediaType()).post(ClientResponse.class, new AppealRepresentation(appeal));
         LOG.debug("Created Bad Update Response {}", badUpdateResponse);
-        System.out.println(String.format("Tried to update order with bad URI at [%s] via POST, outcome [%d]", badLink.getUri().toString(), badUpdateResponse.getStatus()));
+        System.out.println(String.format("Tried to update appeal with bad URI at [%s] via POST, outcome [%d]", badLink.getUri().toString(), badUpdateResponse.getStatus()));
         
-        // Change the order
-        LOG.debug("\n\nStep 3. Change the order");
-        System.out.println(String.format("About to update order at [%s] via POST", orderRepresentation.getUpdateLink().getUri().toString()));
-        order = order().withRandomItems().build();
-        LOG.debug("Created base order {}", order);
-        Link updateLink = orderRepresentation.getUpdateLink();
-        LOG.debug("Created order update link {}", updateLink);
-        OrderRepresentation updatedRepresentation = client.resource(updateLink.getUri()).accept(updateLink.getMediaType()).type(updateLink.getMediaType()).post(OrderRepresentation.class, new OrderRepresentation(order));
-        LOG.debug("Created updated order representation link {}", updatedRepresentation);
-        System.out.println(String.format("Order updated at [%s]", updatedRepresentation.getSelfLink().getUri().toString()));
+  
+           
+        LOG.debug("\n\nStep 7. Update appeal with legitimate ID");
+        System.out.println(String.format("About to update appeal at [%s] via POST", postAppealRepresentation.getUpdateLink().getUri().toString()));
+        StringBuilder AppealRequest2 = new StringBuilder();
+        AppealRequest2.append("I have a couple of questions. Please consider the rectified appeal?");
+        Appeal appeal3 = new Appeal(AppealRequest2);        
+
+        Link updateLink = postAppealRepresentation.getUpdateLink();
+         AppealRepresentation updatedRepresentation = client.resource(updateLink.getUri()).accept(updateLink.getMediaType()).type(updateLink.getMediaType()).post(AppealRepresentation.class, appeal3);
+        LOG.debug("Created updated Appeal representation link {}", updatedRepresentation);
+        System.out.println(String.format("Appeal updated at [%s]", updatedRepresentation.getSelfLink().getUri().toString()));
         
-        // Pay for the order 
+       
+/*        /*  // Pay for the order 
         LOG.debug("\n\nStep 4. Pay for the order");
         System.out.println(String.format("About to create a payment resource at [%s] via PUT", updatedRepresentation.getPaymentLink().getUri().toString()));
         Link paymentLink = updatedRepresentation.getPaymentLink();
@@ -104,7 +131,7 @@ public class Main {
         LOG.debug("paymentLink.getRelValue() = {}", paymentLink.getRelValue());
         LOG.debug("paymentLink.getUri() = {}", paymentLink.getUri());
         LOG.debug("paymentLink.getMediaType() = {}", paymentLink.getMediaType());
-        Payment payment = new Payment(updatedRepresentation.getCost(), "A.N. Other", "12345677878", 12, 2999);
+         Payment payment = new Payment(updatedRepresentation.getCost(), "A.N. Other", "12345677878", 12, 2999);
         LOG.debug("Created new payment object {}", payment);
         PaymentRepresentation  paymentRepresentation = client.resource(paymentLink.getUri()).accept(paymentLink.getMediaType()).type(paymentLink.getMediaType()).put(PaymentRepresentation.class, new PaymentRepresentation(payment));        
         LOG.debug("Created new payment representation {}", paymentRepresentation);
