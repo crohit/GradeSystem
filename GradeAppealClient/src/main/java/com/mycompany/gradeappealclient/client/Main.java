@@ -38,9 +38,15 @@ public class Main {
         URI serviceUri2 = new URI(WRONG_CASE_URI);
         happyPathTest(serviceUri, serviceUri1);
         AbandonPathTest(serviceUri1);
+        AppealFollowUp(serviceUri1);
         AppealReject(serviceUri1);
        // BadPathTest(serviceUri2);
-         
+
+        System.out.println("****************************************");
+        System.out.println("End of Process. Thank you. ");
+        System.out.println("****************************************");
+    
+        
     }
     
     
@@ -166,6 +172,34 @@ public class Main {
             System.out.println(String.format("Appeal status [%s],", finalResponse.getEntity(AppealRepresentation.class).getStatus()));
         }
     }
+    
+    private static void AppealFollowUp(URI serviceUri1) throws Exception {
+     
+       System.out.println();
+       System.out.println("*********************************************************************************************************");
+        System.out.println("Appeal follow up case. Students post appeal and professor forgets case, student follows up.");
+       Client client = Client.create(); 
+       LOG.info("Step 2. Students Post an appeal");
+       StringBuilder AppealRequest = new StringBuilder();
+       AppealRequest.append("I have a questions. Please consider?");
+       Appeal appeal = new Appeal(AppealRequest);
+       AppealRepresentation appealRepresentation = client.resource(serviceUri1).accept(GRADEAPPEAL_MEDIA_TYPE).type(GRADEAPPEAL_MEDIA_TYPE).post(AppealRepresentation.class, appeal);
+       LOG.debug("Created AppealRepresentation {} denoted by the URI {}", appealRepresentation, appealRepresentation.getSelfLink().getUri().toString());
+       System.out.println(String.format("Appeals posted at [%s]", appealRepresentation.getSelfLink().getUri().toString())); 
+
+       LOG.info("Student updates the appeal - with follow up comments");
+       System.out.println(String.format("About to update appeal at [%s] via POST", appealRepresentation.getUpdateLink().getUri().toString()));
+        StringBuilder AppealRequest2 = new StringBuilder();
+        AppealRequest2.append("I have a couple of questions. Please consider the rectified appeal?");
+        Appeal appeal3 = new Appeal(AppealRequest2);        
+
+        Link updateLink = appealRepresentation.getUpdateLink();
+         AppealRepresentation updatedRepresentation = client.resource(updateLink.getUri()).accept(updateLink.getMediaType()).type(updateLink.getMediaType()).post(AppealRepresentation.class, appeal3);
+        LOG.debug("Updated Appeal representation link {}", updatedRepresentation);
+        System.out.println(String.format("Appeal updated at [%s]", updatedRepresentation.getSelfLink().getUri().toString()));
+       LOG.info("Appeal updated with follow up comments");
+        
+    }
 
     private static void AppealReject(URI serviceUri1) throws Exception {
 
@@ -174,8 +208,8 @@ public class Main {
         System.out.println("Case where appeal is posted, and professor rejects it.");
          
         
-        Client client = Client.create();
-        LOG.info("Step 2. Students Post an appeal");
+       Client client = Client.create();
+       LOG.info("Step 2. Students Post an appeal");
        StringBuilder AppealRequest = new StringBuilder();
        AppealRequest.append("I have a questions. Please consider?");
        Appeal appeal = new Appeal(AppealRequest);
@@ -188,9 +222,9 @@ public class Main {
         System.out.println(String.format("About to request appeal from [%s] via GET", appealRepresentation.getSelfLink().getUri().toString()));
         Link appealLink = appealRepresentation.getSelfLink();
         AppealRepresentation postAppealRepresentation = client.resource(appealLink.getUri()).accept(GRADEAPPEAL_MEDIA_TYPE).get(AppealRepresentation.class);
-       System.out.println(String.format("Appeal placed, current status [%s], placed at %s", postAppealRepresentation.getStatus(), postAppealRepresentation.getSelfLink())); 
+        System.out.println(String.format("Appeal placed, current status [%s], placed at %s", postAppealRepresentation.getStatus(), postAppealRepresentation.getSelfLink())); 
 
-       LOG.debug("\n\nStep 4. Professor gets the appeal, revies and rejects the appeal");
+        LOG.debug("\n\nStep 4. Professor gets the appeal, revies and rejects the appeal");
         System.out.println(String.format("About to update appeal at [%s] via POST", postAppealRepresentation.getUpdateLink().getUri().toString()));
         Appeal app = new Appeal(postAppealRepresentation.getAppeal().getStatus());
         Link upLin = postAppealRepresentation.getUpdateLink();
@@ -202,5 +236,4 @@ public class Main {
     }
     
 
-    
 }
