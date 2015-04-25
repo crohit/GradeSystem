@@ -6,6 +6,8 @@ com\mycompany\gradeappealserver\model\Grade.class
 com\mycompany\gradeappealserver\model\Identifier.class
 com\mycompany\gradeappealserver\representations\GradeRepresentations.class
 com\mycompany\gradeappealserver\activities\CreateAppealActivity.class
+com\mycompany\gradeappealserver\activities\UpdateGradeActivity.class
+com\mycompany\gradeappealserver\activities\RemoveAppealActivity.class
 com\mycompany\gradeappealserver\representations\RestbucksUri.class
 com\mycompany\gradeappealserver\activities\CreateGradeActivity.class
 com\mycompany\gradeappealserver\model\Appeal.class

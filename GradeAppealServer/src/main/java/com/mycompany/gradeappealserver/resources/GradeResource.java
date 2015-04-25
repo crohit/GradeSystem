@@ -57,11 +57,6 @@ public class GradeResource {
     
     */
     @GET
-    public String sayHello(){
-        return "hello";
-    }
-    
-    @GET
     @Path("/{gradeId}")
     @Produces("application/vnd.cse564-appeals+xml ")
     public Response getTheGrade() {
@@ -100,7 +95,7 @@ public class GradeResource {
            // return  Response.ok().entity(rep).build();
             response = Response.ok().entity(responseRepresentation).build();
         } catch (Exception ioe) {
-           // LOG.debug("Invalid Order - Problem with the orderrepresentation {}", gradeRepresentation);
+            LOG.debug("Invalid link or URI {}", gradeRepresentation);
             response = Response.status(Status.BAD_REQUEST).build();
         }  
         

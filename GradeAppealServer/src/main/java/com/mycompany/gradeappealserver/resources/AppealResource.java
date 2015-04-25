@@ -9,6 +9,7 @@ package com.mycompany.gradeappealserver.resources;
 import com.mycompany.gradeappealserver.activities.CreateAppealActivity;
 import com.mycompany.gradeappealserver.activities.CreateGradeActivity;
 import com.mycompany.gradeappealserver.activities.ReadAppealActivity;
+import com.mycompany.gradeappealserver.activities.RemoveAppealActivity;
 import com.mycompany.gradeappealserver.activities.UpdateAppealActivity;
 import com.mycompany.gradeappealserver.model.Identifier;
 import com.mycompany.gradeappealserver.repositories.GradeRepository;
@@ -18,6 +19,7 @@ import com.mycompany.gradeappealserver.representations.RestbucksUri;
 import com.mycompany.gradeappealserver.model.Appeal;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -95,6 +97,27 @@ public class AppealResource {
         return response;
      }
 
+        @DELETE
+    @Path("/{appealId}")
+    @Produces("application/vnd.cse564-appeals+xml")
+    public Response removeAppeal() {
+        LOG.info("Removing an Appeal Reource");
+        
+        Response response;
+        
+        try {
+            AppealRepresentation removedAppeal = new RemoveAppealActivity().delete(new RestbucksUri(uriInfo.getRequestUri()));
+            response = Response.ok().entity(removedAppeal).build();
+        } catch (Exception nsoe) {
+            LOG.debug("Problems deleting the appeal resource");
+            response = Response.serverError().build();
+        }
+        
+        LOG.debug("Resulting response for deleting the appeal resource is {}", response);
+        
+        return response;
+    }
+    
     
     @POST
     @Consumes("application/vnd.cse564-appeals+xml")

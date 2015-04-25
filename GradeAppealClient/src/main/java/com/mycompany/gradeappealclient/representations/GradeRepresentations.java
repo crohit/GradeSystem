@@ -57,8 +57,10 @@ public class GradeRepresentations extends Representations{
         return gradeRepresentation;
     }
     
-    public static GradeRepresentations createResponseGradeRepresentation(Grade grade, RestbucksUri gradeUri) {
-        LOG.info("Creating a Response Order for order = {} and order URI", grade.toString(), gradeUri.toString());
+    public static GradeRepresentations createResponseGradeRepresentation(Grade grade, RestbucksUri gradeUri) 
+    
+    {
+         LOG.info("Creating a Response Order for order = {} and order URI", grade.toString(), gradeUri.toString());
         
         GradeRepresentations gradeRepresentation = null; 
         
@@ -122,9 +124,5 @@ public Grade getGrade() {
     
     
    
-    }
-
-    
-    
-    
+}    
 

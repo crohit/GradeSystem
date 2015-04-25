@@ -19,14 +19,22 @@ import com.mycompany.gradeappealclient.repositories.GradeRepository;
 
 public class CreateGradeActivity {
 
-    public GradeRepresentations create(Grade grade, RestbucksUri requestUri) {
-        //grade.setStatus(AppealStatus.PENDING);
-                
+    public GradeRepresentations create(Grade grade, RestbucksUri requestUri)
+    {
+    {
+                     
         Identifier identifier = GradeRepository.current().store(grade);
         
         RestbucksUri gradeUri = new RestbucksUri(requestUri.getBaseUri() + "/grades/" + identifier.toString());
         //RestbucksUri paymentUri = new RestbucksUri(requestUri.getBaseUri() + "/payment/" + identifier.toString());
         return new GradeRepresentations(grade,
                 new Link(Representations.SELF_REL_VALUE, gradeUri));
+    
     }
+//    catch(Exception f) {
+//    System.out.println("\nBad link or URI");
+//    return null;
+//    }
+    
+}
 }

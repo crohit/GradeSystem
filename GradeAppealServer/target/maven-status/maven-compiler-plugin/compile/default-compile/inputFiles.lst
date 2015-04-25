@@ -8,6 +8,7 @@ C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\my
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\resources\ApplicationConfig.java
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\model\Grade.java
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\activities\CreateAppealActivity.java
+C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\activities\RemoveAppealActivity.java
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\repositories\AppealRepository.java
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\activities\ReadAppealActivity.java
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\repositories\GradeRepository.java
@@ -17,3 +18,4 @@ C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\my
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\representations\GradeRepresentations.java
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\resources\GradeResource.java
 C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\activities\CreateGradeActivity.java
+C:\Users\Owner\Documents\NetBeansProjects\GradeAppealServer\src\main\java\com\mycompany\gradeappealserver\activities\UpdateGradeActivity.java
